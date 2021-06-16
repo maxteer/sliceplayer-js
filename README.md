@@ -28,7 +28,7 @@ $ npm install sliceplayer-js
 # ES Modules
 import SlicePlayer from 'sliceplayer-js';
 # CommonJS
-const SlicePlayer = require('sliceplayer-js');
+const SlicePlayer = require('sliceplayer-js').default;
 
 const player = new SlicePlayer({
   spotifyConfig: {
