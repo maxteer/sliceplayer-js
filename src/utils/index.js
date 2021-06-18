@@ -33,13 +33,17 @@ export function between(haystack, left, right) {
   return haystack;
 }
 
-export async function loadURL(url, headers = {}) {
+export async function loadURL(url, body = null, headers = {}) {
   try {
     headers['User-Agent'] =
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36';
     headers['Accept-language'] = 'en-US,en;';
 
-    const response = await axios(url, { headers });
+    const response = await axios(url, {
+      method: body !== null ? 'POST' : 'GET',
+      headers,
+      data: body,
+    });
     return response.data;
   } catch (error) {
     throw Error(`Couldn't load URL: ${error.message ? error.message : error}`);

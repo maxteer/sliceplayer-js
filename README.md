@@ -252,7 +252,7 @@ Load musics from a Spotify playlist using [Spotify Web API](https://developer.sp
 | ------- | ---------------------- | -------- | --------------------- |
 | type    | string                 | playlist | The type of SliceItem |
 | details | YoutubePlaylistDetails |          | Playlist details      |
-| formats | YoutubePlaylistVideo[] |          | Playlist videos       |
+| videos | YoutubePlaylistVideo[] |          | Playlist videos       |
 
 ## YoutubeVideoDetails
 

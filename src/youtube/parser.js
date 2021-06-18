@@ -64,7 +64,7 @@ export async function getPlayerConfig(url, attempts = 2) {
     return playerConfig;
   }
 
-  throw Error(reason);
+  throw reason;
 }
 
 export function getVideoDetails(config) {
@@ -148,7 +148,7 @@ export async function getInitialData(url, attempts = 2) {
     return initialData;
   }
 
-  throw Error(reason);
+  throw reason;
 }
 
 export function getPlaylistDetails(id, initialData) {
@@ -305,6 +305,7 @@ const populatePlaylist = async (content, videos, clientVersion) => {
     if (continuation) {
       await loadPlaylistContinuation(
         continuation.continuationEndpoint.continuationCommand.token,
+        continuation.continuationEndpoint.clickTrackingParams,
         videos,
         clientVersion,
       );
@@ -314,24 +315,43 @@ const populatePlaylist = async (content, videos, clientVersion) => {
 
 const loadPlaylistContinuation = async (
   continuation,
+  clickTrackingParams,
   videos,
   clientVersion,
 ) => {
-  const html = await utils.loadURL(
-    `https://www.youtube.com/browse_ajax?ctoken=${continuation}&continuation=${continuation}`,
-    {
-      'X-YouTube-Client-Name': '1',
-      'X-YouTube-Client-Version': clientVersion,
-    },
-  );
-
   try {
-    const response = JSON.parse(html);
+    const response = await utils.loadURL(
+      `https://www.youtube.com/youtubei/v1/browse?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8`,
+      {
+        context: {
+          clickTracking: {
+            clickTrackingParams,
+          },
+          client: {
+            clientName: 'WEB',
+            clientVersion: '2.20201021.03.00',
+          },
+        },
+        continuation,
+      },
+      {
+        'X-YouTube-Client-Name': '1',
+        'X-YouTube-Client-Version': clientVersion,
+      },
+    );
+
+    let contents;
+    if (response.onResponseReceivedActions) {
+      contents =
+        response.onResponseReceivedActions[0].appendContinuationItemsAction
+          .continuationItems;
+    } else {
+      console.info(`Unknown playlist continuation format: ${response}`);
+    }
+
     await populatePlaylist(
       {
-        contents:
-          response[1].response.onResponseReceivedActions[0]
-            .appendContinuationItemsAction.continuationItems,
+        contents,
       },
       videos,
       clientVersion,
@@ -413,17 +433,28 @@ const parsePlayabilityStatus = playabilityStatus => {
 };
 
 const parsePlaylistStatus = alerts => {
-  const alertRenderer = alerts[0].alertRenderer;
-  if (alertRenderer.text) {
-    let reason = '';
-    if (alertRenderer.text.simpleText) {
-      reason = alertRenderer.text.simpleText;
-    } else if (alertRenderer.text.runs) {
-      for (const s of alertRenderer.text.runs) {
-        reason += s.text;
-      }
+  const alert = alerts[0];
+  if (alert) {
+    let renderer;
+    if (alert.alertRenderer) {
+      renderer = alert.alertRenderer;
+    } else if (alert.alertWithButtonRenderer) {
+      renderer = alert.alertWithButtonRenderer;
+      if (renderer.type === 'INFO') return;
     }
 
-    throw Error(reason);
+    if (!renderer) return;
+    if (renderer.text) {
+      let reason = '';
+      if (alertRenderer.text.simpleText) {
+        reason = alertRenderer.text.simpleText;
+      } else if (alertRenderer.text.runs) {
+        for (const s of alertRenderer.text.runs) {
+          reason += s.text;
+        }
+      }
+
+      throw Error(reason);
+    }
   }
 };
