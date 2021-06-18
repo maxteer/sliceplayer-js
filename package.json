@@ -22,11 +22,12 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import-helpers": "^1.1.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "ffmpeg-static": "^4.3.0",
     "prettier": "^2.3.0",
     "sucrase": "^3.18.1"
   },
   "scripts": {
-    "test": "node -r sucrase/register test/index",
+    "test": "node -r sucrase/register tests/index",
     "build": "sucrase ./src -d ./lib --transforms imports",
     "example-load-item": "node -r sucrase/register examples/loadItem",
     "example-convert-video": "node -r sucrase/register examples/convertVideoToOpusStream",

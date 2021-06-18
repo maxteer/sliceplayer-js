@@ -1,5 +1,5 @@
 import * as utils from '../utils';
-import youtube from './';
+import * as youtube from './';
 import extractor from './extractor';
 
 export async function getInitialData(url, attempts = 2) {
