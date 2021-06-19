@@ -10,6 +10,7 @@ const player = new SlicePlayer({
 });
 
 // Valid URLs
+const ytbeVideo = 'https://youtu.be/7iTCAirmYro';
 const ytVideo = 'https://www.youtube.com/watch?v=DYcUt0DGK6w';
 const ytMusicVideo = 'https://music.youtube.com/watch?v=DYcUt0DGK6w';
 const ytPlaylist =

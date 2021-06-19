@@ -43,6 +43,7 @@ const player = new SlicePlayer({
 
 ```javascript
 // Valid URLs
+const ytbeVideo = 'https://youtu.be/7iTCAirmYro';
 const ytVideo = 'https://www.youtube.com/watch?v=DYcUt0DGK6w';
 const ytMusicVideo = 'https://music.youtube.com/watch?v=DYcUt0DGK6w';
 const ytPlaylist =
@@ -252,7 +253,7 @@ Load musics from a Spotify playlist using [Spotify Web API](https://developer.sp
 | ------- | ---------------------- | -------- | --------------------- |
 | type    | string                 | playlist | The type of SliceItem |
 | details | YoutubePlaylistDetails |          | Playlist details      |
-| videos | YoutubePlaylistVideo[] |          | Playlist videos       |
+| videos  | YoutubePlaylistVideo[] |          | Playlist videos       |
 
 ## YoutubeVideoDetails
 
