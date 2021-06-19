@@ -12,7 +12,10 @@ export async function get(link) {
   let result;
   if (link.match(YOUTU_BE)) {
     const urlInfo = getURLInfo(link);
-    const videoId = urlInfo.path.substring(0, Math.min(videoId.length, 11));
+    const videoId = urlInfo.path.substring(
+      0,
+      Math.min(urlInfo.path.length, 11),
+    );
     result = await youtube.getVideo(videoId);
   } else if (link.match(YOUTUBE_COM)) {
     const urlInfo = getURLInfo(link);
