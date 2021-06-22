@@ -65,8 +65,14 @@ export interface YoutubePlaylistDetails {
   thumbnails: YoutubeThumbnail[];
   title: string;
   author: string;
-  videoCount: number;
-  viewCount: number;
+  /**
+   * only avaiable in real youtube playlists.
+   */
+  videoCount?: number;
+  /**
+   * only avaiable in real youtube playlists.
+   */
+  viewCount?: number;
 }
 
 export interface YoutubePlaylistVideo {
